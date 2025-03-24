@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:dynamic_form_app/app/app_router.dart';
 import 'package:dynamic_form_app/controllers/network_controller.dart';
 import 'package:dynamic_form_app/helpers/database_helper.dart';
 import 'package:dynamic_form_app/models/field_type_model.dart';
@@ -8,13 +9,12 @@ import 'package:dynamic_form_app/models/form_model.dart';
 import 'package:dynamic_form_app/utils/constants.dart';
 import 'package:get/get.dart';
 
-class FormService {
+class FormService extends GetxController {
   final DatabaseHelper _db = DatabaseHelper();
   final NetworkController _networkController = Get.find<NetworkController>();
 
   Future<FormModel> createForm(Map<String, dynamic> data) async {
     if (_networkController.isConnected) {
-      dev.log('Fetch data from API');
       final form = FormModel(id: 1, name: 'Form from API');
       return form;
     } else {
@@ -50,7 +50,8 @@ class FormService {
     final database = await _db.database;
 
     if (_networkController.isConnected) {
-      dev.log('Fetch data from API');
+      dev.log('saved data into API');
+      Get.toNamed(AppRouter.home);
       return;
     }
 
@@ -63,6 +64,7 @@ class FormService {
       }
     });
     dev.log('Created form fields', name: 'FORM_SERVICE');
+    Get.toNamed(AppRouter.home);
   }
 
   Future<List<FormModel>> getForms() async {

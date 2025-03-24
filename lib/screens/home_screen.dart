@@ -9,43 +9,44 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FormService formService = Get.find<FormService>();
+    return GetBuilder<FormService>(
+      builder:
+          (formService) => Scaffold(
+            appBar: AppBar(title: const Text('DynamicForm App')),
+            body: FutureBuilder(
+              future: formService.getForms(),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('DynamicForm App')),
-      body: FutureBuilder(
-        future: formService.getForms(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No hay formularios creados aun',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
 
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-              child: Text(
-                'No hay formularios creados aun',
-                style: TextStyle(color: Colors.grey),
-              ),
-            );
-          }
-
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (ctx, index) {
-              final form = snapshot.data![index];
-              return FormCard(form: form);
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(AppRouter.createForm),
-        child: const Icon(Icons.add),
-      ),
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (ctx, index) {
+                    final form = snapshot.data![index];
+                    return FormCard(form: form);
+                  },
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => Get.toNamed(AppRouter.createForm),
+              child: const Icon(Icons.add),
+            ),
+          ),
     );
   }
 }

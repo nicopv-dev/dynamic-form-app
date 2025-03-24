@@ -18,16 +18,13 @@ class FormScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.yellow,
-            expandedHeight: 200,
+            expandedHeight: 140,
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(form.name),
               centerTitle: true,
-              background: Image.asset(
-                'assets/images/bg.jpg',
-                fit: BoxFit.cover,
-              ),
+              background: Container(color: Colors.yellow),
             ),
           ),
           SliverToBoxAdapter(
