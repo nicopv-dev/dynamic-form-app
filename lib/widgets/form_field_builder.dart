@@ -50,22 +50,27 @@ class CustomFormFieldBuilder extends StatelessWidget {
           style: TextStyle(fontSize: 16, color: Colors.black),
         );
         break;
-      // case 'dropdown':
-      //   formField = DropdownButtonFormField<String>(
-      //     decoration: InputDecoration(
-      //       labelText: field.name,
-      //       border: InputBorder.none,
-      //       contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      //     ),
-      //     items: field.options.map<DropdownMenuItem<String>>((String value) {
-      //       return DropdownMenuItem<String>(
-      //         value: value,
-      //         child: Text(value),
-      //       );
-      //     }).toList(),
-      //     onChanged: (String? newValue) {},
-      //   );
-      //   break;
+      case 'dropdown':
+        formField = DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            labelText: field.name,
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          ),
+          items:
+              [
+                'Option 1',
+                'Option 2',
+                'Option 3',
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+          onChanged: (String? newValue) {},
+        );
+        break;
       case 'image':
         formField = GestureDetector(
           onTap: () {

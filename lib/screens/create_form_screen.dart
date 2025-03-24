@@ -30,6 +30,12 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
     });
   }
 
+  void removeSelectedField(int index) {
+    setState(() {
+      _selectedFields.removeAt(index);
+    });
+  }
+
   void initiFields() async {
     final data = await _formService.getFormFieldsTypes();
     setState(() {
@@ -146,6 +152,12 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
         ),
         centerTitle: true,
         backgroundColor: Colors.yellow,
+        actions:
+            _selectedFields.isEmpty
+                ? []
+                : [
+                  IconButton(icon: const Icon(Icons.save), onPressed: saveForm),
+                ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -158,7 +170,15 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                     itemCount: _selectedFields.length,
                     itemBuilder: (context, index) {
                       final field = _selectedFields[index];
-                      return CustomFormFieldBuilder(field: field);
+                      return Row(
+                        children: [
+                          Expanded(child: CustomFormFieldBuilder(field: field)),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => removeSelectedField(index),
+                          ),
+                        ],
+                      );
                     },
                   ),
                 )
@@ -167,12 +187,6 @@ class _CreateFormScreenState extends State<CreateFormScreen> {
                     'No hay campos seleccionados',
                     style: TextStyle(color: Colors.grey),
                   ),
-                ),
-            _selectedFields.isEmpty
-                ? const SizedBox()
-                : ElevatedButton(
-                  onPressed: saveForm,
-                  child: Text('Guardar formulario'),
                 ),
           ],
         ),
